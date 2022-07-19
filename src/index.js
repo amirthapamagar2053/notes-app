@@ -2,8 +2,11 @@ import axios from "axios";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-axios.get("http://localhost:3001/notes").then((response) => {
-  ReactDOM.createRoot(document.getElementById("root")).render(
-    <App notes={response.data} />
-  );
-});
+axios
+  .get("http://localhost:3001/notes")
+  .then((response) => {
+    ReactDOM.createRoot(document.getElementById("root")).render(
+      <App notes={response.data} />
+    );
+  })
+  .catch((error) => console.log("File Not Found"));

@@ -23,7 +23,8 @@
         "name":       "sonoo",   
         "salary":      56000,   
         "married":    true  
-    }  
+    },
+    "arr":["test1","test2","test3"]  
     
   }
   
