@@ -9,7 +9,7 @@ const App = (props) => {
     event.preventDefault();
     console.dir(event);
     const newObj = {
-      id: props.notes.length + 1,
+      id: notes.length + 1,
       content: note,
       Date: new Date().toISOString(),
       important: Math.random() > 0.5 ? true : false,
