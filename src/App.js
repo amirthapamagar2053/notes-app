@@ -1,9 +1,18 @@
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import Note from "./components/Note";
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes);
+
+const App = () => {
+  const [notes, setNotes] = useState([]);
   const [note, setNote] = useState("Type a note");
   const [toggle, setToggle] = useState(true);
+  console.log(notes);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/notes")
+      .then((response) => setNotes(response.data));
+    console.log("axios called", notes);
+  }, [toggle]);
 
   const handleChange = (event) => {
     event.preventDefault();
