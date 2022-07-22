@@ -21,6 +21,7 @@ const App = (props) => {
     });
     setNote("");
   };
+
   useEffect(() => {
     axios
       .get("http://localhost:3001/notes")
@@ -50,7 +51,22 @@ const App = (props) => {
       </button>
       <ul>
         {notesToShow.map((note) => (
-          <Note key={note.id} content={note.content} />
+          <Note
+            key={note.id}
+            content={note.content}
+            important={note.important.toString()}
+            toggleimportance={() => {
+              const updateImportant = { ...note, important: !note.important };
+              axios
+                .put(`http://localhost:3001/notes/${note.id}`, updateImportant)
+                .then((response) => {
+                  setNotes(
+                    notes.map((x) => (x.id !== note.id ? x : response.data))
+                  );
+                  setNote("");
+                });
+            }}
+          />
         ))}
       </ul>
       <form onSubmit={handleChange}>
