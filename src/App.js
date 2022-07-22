@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Note from "./components/Note";
-import axios from "axios";
+import noteServices from "./services/notesservices";
+
 const App = (props) => {
   const [notes, setNotes] = useState(props.notes);
   const [note, setNote] = useState("Type a note");
@@ -15,19 +16,15 @@ const App = (props) => {
       Date: new Date().toISOString(),
       important: Math.random() > 0.5 ? true : false,
     };
-    axios.post("http://localhost:3001/notes", newObj).then((response) => {
-      console.log(response);
-      setNotes([...notes, response.data]);
+    noteServices.create(newObj).then((response) => {
+      setNotes([...notes, response]);
     });
     setNote("");
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/notes")
-      .then((response) => setNotes(response.data));
-    console.log("axios called", notes);
-  }, [toggle]);
+    noteServices.getAll().then((response) => setNotes(response));
+  }, []);
 
   const changeNote = (event) => {
     setNote(event.target.value);
@@ -57,14 +54,10 @@ const App = (props) => {
             important={note.important.toString()}
             toggleimportance={() => {
               const updateImportant = { ...note, important: !note.important };
-              axios
-                .put(`http://localhost:3001/notes/${note.id}`, updateImportant)
-                .then((response) => {
-                  setNotes(
-                    notes.map((x) => (x.id !== note.id ? x : response.data))
-                  );
-                  setNote("");
-                });
+              noteServices.update(note.id, updateImportant).then((response) => {
+                setNotes(notes.map((x) => (x.id !== note.id ? x : response)));
+                setNote("");
+              });
             }}
           />
         ))}
