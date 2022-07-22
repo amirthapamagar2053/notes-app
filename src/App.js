@@ -54,10 +54,16 @@ const App = (props) => {
             important={note.important.toString()}
             toggleimportance={() => {
               const updateImportant = { ...note, important: !note.important };
-              noteServices.update(note.id, updateImportant).then((response) => {
-                setNotes(notes.map((x) => (x.id !== note.id ? x : response)));
-                setNote("");
-              });
+              noteServices
+                .update(note.id, updateImportant)
+                .then((response) => {
+                  setNotes(notes.map((x) => (x.id !== note.id ? x : response)));
+                  setNote("");
+                })
+                .catch((error) => {
+                  window.alert("the note has been deleted");
+                  setNotes(notes.filter((x) => x.id !== note.id));
+                });
             }}
           />
         ))}
