@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Footer from "./components/Footer";
 import Note from "./components/Note";
 import Notification from "./components/Notification";
+import noteServices from "./services/notesservices";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
@@ -51,7 +52,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification message="this is a important message" />
+      <Notification message={message} />
       <h1>Notes</h1>
       <button onClick={changeToggle}>
         Show {toggle ? "all" : "important"}
@@ -71,7 +72,11 @@ const App = () => {
                   setNote("");
                 })
                 .catch((error) => {
-                  window.alert("the note has been deleted");
+                  // window.alert("the note has been deleted");
+                  setMessage("the message has been deleted");
+                  setTimeout(() => {
+                    setMessage(null);
+                  }, 2000);
                   setNotes(notes.filter((x) => x.id !== note.id));
                 });
             }}
