@@ -1,20 +1,14 @@
-<<<<<<< HEAD
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Footer from "./components/Footer";
 import Note from "./components/Note";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
-=======
-import { useState, useEffect } from "react";
-import Note from "./components/Note";
-import noteServices from "./services/notesservices";
-
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes);
->>>>>>> 598613ae50e7f43e906c5d0dd097dc08fbe23c46
   const [note, setNote] = useState("Type a note");
   const [toggle, setToggle] = useState(true);
+  const [message, setMessage] = useState(null);
   console.log(notes);
   useEffect(() => {
     axios
@@ -27,11 +21,7 @@ const App = (props) => {
     event.preventDefault();
     console.dir(event);
     const newObj = {
-<<<<<<< HEAD
       id: notes.length + 1,
-=======
-      // id: notes.length + 1,
->>>>>>> 598613ae50e7f43e906c5d0dd097dc08fbe23c46
       content: note,
       Date: new Date().toISOString(),
       important: Math.random() > 0.5 ? true : false,
@@ -61,6 +51,7 @@ const App = (props) => {
 
   return (
     <div>
+      <Notification message="this is a important message" />
       <h1>Notes</h1>
       <button onClick={changeToggle}>
         Show {toggle ? "all" : "important"}
@@ -91,6 +82,7 @@ const App = (props) => {
         <input value={note} onChange={changeNote} />
         <button>CLick me for submit</button>
       </form>
+      <Footer />{" "}
     </div>
   );
 };
