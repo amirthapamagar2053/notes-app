@@ -1,12 +1,11 @@
+import { useState } from "react";
 const Footer = () => {
-  let footerObj = {
-    color: "red",
-  };
+  const [footerObj, setFooter] = useState({ color: "red" });
 
   const changeColor = () => {
     if (window.confirm("Change color ?")) {
-      //   footerObj = { ...footerObj, color: "green" };
-      footerObj.color = "green";
+      setFooter({ ...footerObj, color: "green" });
+      //   footerObj.color = "green";
     }
   };
 
