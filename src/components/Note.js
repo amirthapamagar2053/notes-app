@@ -1,9 +1,15 @@
-const Note = (props) => {
+const Note = ({ note, toggleImportance }) => {
+  // let arr = [];
+  // arr.push(note.content);
+  // console.log(arr);
+  // return <li>{arr.sort((a, b) => a.length - b.lenght)}</li>;
   return (
-    <li>
-      {props.content} ({props.important}){" "}
-      <button onClick={props.toggleimportance}>Change important</button>
-    </li>
+    <div>
+      <li style={{ color: "royalblue" }}>
+        {note.content} ({note.important.toString()})
+      </li>
+      <button onClick={toggleImportance}> Change Importance </button>
+    </div>
   );
 };
 

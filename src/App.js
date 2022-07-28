@@ -1,94 +1,90 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
-import Footer from "./components/Footer";
 import Note from "./components/Note";
+import Footer from "./components/Footer";
+import noteService from "./services/notesservices";
 import Notification from "./components/Notification";
-import noteServices from "./services/notesservices";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
-  const [note, setNote] = useState("Type a note");
-  const [toggle, setToggle] = useState(true);
-  const [message, setMessage] = useState(null);
-  console.log(notes);
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/notes")
-      .then((response) => setNotes(response.data));
-    console.log("axios called", notes);
-  }, [toggle]);
-
-  const handleChange = (event) => {
-    event.preventDefault();
-    console.dir(event);
-    const newObj = {
-      id: notes.length + 1,
-      content: note,
-      Date: new Date().toISOString(),
-      important: Math.random() > 0.5 ? true : false,
-    };
-    noteServices.create(newObj).then((response) => {
-      setNotes([...notes, response]);
-    });
-    setNote("");
-  };
+  const [addNewNote, setaddNote] = useState("");
+  const [showAll, setshowAll] = useState(true);
+  const [msg, setMsg] = useState(null);
 
   useEffect(() => {
-    noteServices.getAll().then((response) => setNotes(response));
+    // axios.get("http://localhost:3001/notes")
+    noteService.getAll().then((data) => setNotes(data));
+    console.log(notes);
   }, []);
 
-  const changeNote = (event) => {
-    setNote(event.target.value);
+  const addNote = (event) => {
+    event.preventDefault();
+    const newNote = {
+      // id: notes.length + 1,
+      content: addNewNote,
+      date: new Date().toISOString(),
+      important: Math.random() < 0.5 ? true : false,
+    };
+    // axios.post("http://localhost:3001/notes", newNote)
+    noteService.create(newNote).then((data) => {
+      // console.log(newNote);
+      setNotes([...notes, data]);
+      setaddNote("");
+    });
   };
 
-  const changeToggle = () => {
-    setToggle(!toggle);
+  const handleOnChange = (event) => {
+    setaddNote(event.target.value);
+    // console.log(event.target.value);
   };
 
-  const usingFilter = () => {
-    return notes.filter((Element) => Element.important === true);
+  const togglebutton = () => {
+    setshowAll(!showAll);
   };
-  const notesToShow = toggle ? notes : usingFilter();
+  const notesToShow = showAll
+    ? notes
+    : notes.filter((x) => x.important === true);
 
   return (
     <div>
-      <Notification message={message} />
+      <Notification msg={msg} />
       <h1>Notes</h1>
-      <button onClick={changeToggle}>
-        Show {toggle ? "all" : "important"}
+      <button onClick={togglebutton}>
+        Show {showAll ? "important" : "all"}
       </button>
-      <ul>
+      <ol>
         {notesToShow.map((note) => (
           <Note
             key={note.id}
-            content={note.content}
-            important={note.important.toString()}
-            toggleimportance={() => {
-              const updateImportant = { ...note, important: !note.important };
-              noteServices
-                .update(note.id, updateImportant)
-                .then((response) => {
-                  setNotes(notes.map((x) => (x.id !== note.id ? x : response)));
-                  setNote("");
+            note={note}
+            toggleImportance={() => {
+              // console.log(`button clicked from ${note.id}`);
+              const updatedNotes = { ...note, important: !note.important };
+              // axios.put(`http://localhost:3001/notes/${note.id}`, updatedNotes)
+
+              noteService
+                .update(note.id, updatedNotes)
+                .then((data) => {
+                  setNotes(notes.map((x) => (x.id === note.id ? data : x)));
+                  setaddNote("");
                 })
                 .catch((error) => {
-                  // window.alert("the note has been deleted");
-                  console.dir(error);
-                  setMessage("the message has been deleted");
-                  setTimeout(() => {
-                    setMessage(null);
-                  }, 2000);
+                  setMsg("The note has been deleted");
+                  setTimeout(() => setMsg(""), 3000);
                   setNotes(notes.filter((x) => x.id !== note.id));
                 });
             }}
           />
         ))}
-      </ul>
-      <form onSubmit={handleChange}>
-        <input value={note} onChange={changeNote} />
-        <button>CLick me for submit</button>
+      </ol>
+      <form onSubmit={addNote}>
+        <input
+          value={addNewNote}
+          onChange={handleOnChange}
+          placeholder="Enter Your Note"
+        />
+        <button type="submit"> Save </button>
       </form>
-      <Footer />{" "}
+      <Footer />
     </div>
   );
 };

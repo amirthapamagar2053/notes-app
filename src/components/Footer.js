@@ -1,19 +1,20 @@
-import { useState } from "react";
 const Footer = () => {
-  const [footerObj, setFooter] = useState({ color: "red" });
-
-  const changeColor = () => {
-    if (window.confirm("Change color ?")) {
-      setFooter({ ...footerObj, color: "green" });
-      //   footerObj.color = "green";
-    }
+  let footerStyle = {
+    color: "green",
+    fontStyle: "italic",
+    fontSize: 16,
+    backgroundColor: "teal",
   };
 
+  if (true) {
+    footerStyle = { ...footerStyle, color: "red" };
+  }
   return (
-    <div style={footerObj} onClick={changeColor}>
+    <div style={footerStyle}>
       <br />
-      <em>Notes app,Tej Fellow</em>
+      <em>Hello , TaTa ,ByeBye @Anthony 2022</em>
     </div>
   );
 };
+
 export default Footer;
