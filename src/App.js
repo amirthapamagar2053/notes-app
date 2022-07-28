@@ -73,6 +73,7 @@ const App = () => {
                 })
                 .catch((error) => {
                   // window.alert("the note has been deleted");
+                  console.dir(error);
                   setMessage("the message has been deleted");
                   setTimeout(() => {
                     setMessage(null);
